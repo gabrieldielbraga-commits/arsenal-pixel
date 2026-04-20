@@ -5,7 +5,7 @@
   // CONFIGURAÇÃO — altere apenas estas 2 linhas
   // ══════════════════════════════════════════════════════
   const PIXEL_ID = '2428180934327378';
-  const API_URL  = 'https://SEU-SITE.netlify.app/.netlify/functions/capi';
+  const API_URL  = 'https://arsenal-pixel.netlify.app/.netlify/functions/capi';
   // Após o deploy na Netlify, substitua SEU-SITE pelo nome do seu site
   // Exemplo: https://arsenal-pixel.netlify.app/.netlify/functions/capi
 
