@@ -6,12 +6,10 @@
 <title>Arsenal Pixel — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0f0f14;--surface:#1a1a24;--surface2:#12121a;--border:#2a2a3a;--gold:#d4a017;--gold2:#f0b429;--text:#e8e8f0;--muted:#666680;--danger:#ef4444;--success:#22c55e;--mono:'JetBrains Mono',monospace;--sans:'Rajdhani',sans-serif}
+:root{--bg:#0f0f14;--surface:#1a1a24;--border:#2a2a3a;--gold:#d4a017;--gold2:#f0b429;--text:#e8e8f0;--muted:#666680;--danger:#ef4444;--success:#22c55e;--mono:'JetBrains Mono',monospace;--sans:'Rajdhani',sans-serif}
 *{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse 80% 50% at 50% -20%,#d4a01710,transparent);pointer-events:none;z-index:0}
-
-/* LOGIN */
 #loginScreen{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:var(--bg)}
 #loginScreen::before{content:'';position:fixed;inset:0;background-image:linear-gradient(#2a2a3a22 1px,transparent 1px),linear-gradient(90deg,#2a2a3a22 1px,transparent 1px);background-size:40px 40px}
 .login-box{position:relative;z-index:1;width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:40px;text-align:center}
@@ -23,11 +21,8 @@ body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(
 .login-btn{width:100%;padding:12px;border-radius:8px;background:var(--gold);color:#000;font-family:var(--sans);font-size:16px;font-weight:700;border:none;cursor:pointer;transition:all .2s;letter-spacing:1px}
 .login-btn:hover{background:var(--gold2);transform:translateY(-1px)}
 .login-err{color:var(--danger);font-size:12px;font-family:var(--mono);margin-top:8px;display:none}
-
-/* DASHBOARD */
 #dashboard{display:none;position:relative;z-index:1}
 .container{max-width:1400px;margin:0 auto;padding:0 24px 48px}
-
 header{display:flex;align-items:center;justify-content:space-between;padding:20px 0 24px;border-bottom:1px solid var(--border);margin-bottom:28px}
 .logo{display:flex;align-items:center;gap:12px}
 .logo-icon{width:42px;height:42px;background:linear-gradient(135deg,var(--gold),#8a6200);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 12px #d4a01740}
@@ -45,8 +40,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 .hbtn.spinning svg{animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .last-update{font-size:10px;font-family:var(--mono);color:var(--muted)}
-
-/* MÉTRICAS */
 .metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:28px}
 @media(max-width:1100px){.metrics{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:600px){.metrics{grid-template-columns:repeat(2,1fr)}}
@@ -56,19 +49,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 .mlabel{font-size:10px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px}
 .mvalue{font-size:30px;font-weight:700;line-height:1;color:var(--card-color,var(--gold))}
 .msub{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:5px}
-
-/* MAIN GRID */
 .main-grid{display:grid;grid-template-columns:1fr 360px;gap:20px}
 @media(max-width:1024px){.main-grid{grid-template-columns:1fr}}
-
-/* PANELS */
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .ph{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border)}
 .ptitle{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--gold);display:flex;align-items:center;gap:8px}
 .paction{font-size:11px;font-family:var(--mono);color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border);padding:4px 10px;border-radius:5px;transition:all .15s}
 .paction:hover{border-color:var(--gold);color:var(--gold)}
-
-/* LOG */
 .log-stream{height:460px;overflow-y:auto}
 .log-stream::-webkit-scrollbar{width:3px}
 .log-stream::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
@@ -90,8 +77,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 .log-st.err{background:#ef444412;color:var(--danger)}
 .log-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--muted);gap:8px;font-family:var(--mono);font-size:11px}
 .log-empty .ico{font-size:28px;opacity:.3}
-
-/* SIDEBAR */
 .sidebar{display:flex;flex-direction:column;gap:16px}
 .chart-wrap{padding:14px 18px}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:12px}
@@ -99,8 +84,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 .bar-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
 .bar-fill{height:100%;border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
 .bar-cnt{font-size:10px;font-family:var(--mono);color:var(--text);font-weight:600;width:24px;text-align:right}
-
-/* TOGGLES */
 .tlist{padding:6px 18px 14px}
 .trow{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid #2a2a3a55}
 .trow:last-child{border-bottom:none}
@@ -112,8 +95,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 .tslider::before{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:var(--muted);border-radius:50%;transition:all .2s}
 .toggle input:checked+.tslider{background:var(--gold)}
 .toggle input:checked+.tslider::before{transform:translateX(16px);background:#000}
-
-/* TESTE */
 .tpanel{padding:14px 18px}
 .flabel{font-size:10px;font-family:var(--mono);color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
 .finput,.fselect{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:11px;padding:8px 10px;outline:none;transition:border-color .2s;margin-bottom:10px}
@@ -124,8 +105,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 .tres{margin-top:10px;padding:10px;border-radius:6px;font-family:var(--mono);font-size:10px;display:none;word-break:break-all;white-space:pre-wrap;max-height:120px;overflow-y:auto}
 .tres.ok{background:#22c55e0a;border:1px solid #22c55e22;color:var(--success)}
 .tres.err{background:#ef44440a;border:1px solid #ef444422;color:var(--danger)}
-
-/* CONFIG */
 .cfg{padding:14px 18px}
 .cfg-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a2a3a55}
 .cfg-row:last-child{border-bottom:none}
@@ -135,8 +114,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
 </style>
 </head>
 <body>
-
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">🛡️</div>
@@ -147,8 +124,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
     <div class="login-err" id="loginErr">❌ Senha incorreta</div>
   </div>
 </div>
-
-<!-- DASHBOARD -->
 <div id="dashboard">
 <div class="container">
   <header>
@@ -166,7 +141,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
       <button class="hbtn" onclick="logout()" style="color:var(--danger);border-color:#ef444433">Sair</button>
     </div>
   </header>
-
   <div class="metrics">
     <div class="mcard" style="--card-color:#60a5fa"><div class="mlabel">PageView</div><div class="mvalue" id="cnt-PageView">0</div><div class="msub">visualizações</div></div>
     <div class="mcard" style="--card-color:#a78bfa"><div class="mlabel">ViewContent</div><div class="mvalue" id="cnt-ViewContent">0</div><div class="msub">conteúdo visto</div></div>
@@ -175,7 +149,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
     <div class="mcard" style="--card-color:#f472b6"><div class="mlabel">TimeOnPage</div><div class="mvalue" id="cnt-TimeOnPage">0</div><div class="msub">tempo na página</div></div>
     <div class="mcard" style="--card-color:var(--gold)"><div class="mlabel">Total 24h</div><div class="mvalue" id="cnt-Total">0</div><div class="msub">todos eventos</div></div>
   </div>
-
   <div class="main-grid">
     <div class="panel">
       <div class="ph">
@@ -196,24 +169,21 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
         <div class="log-empty"><div class="ico">📡</div><span>Carregando eventos...</span></div>
       </div>
     </div>
-
     <div class="sidebar">
       <div class="panel">
         <div class="ph"><div class="ptitle">📊 Distribuição</div></div>
         <div class="chart-wrap" id="chartBars"></div>
       </div>
-
       <div class="panel">
         <div class="ph"><div class="ptitle">⚙️ Eventos Ativos</div><button class="paction" onclick="saveToggles()">Salvar</button></div>
         <div class="tlist">
           <div class="trow"><div class="tname">PageView<small>ao carregar a página</small></div><label class="toggle"><input type="checkbox" id="tog-PageView" checked/><span class="tslider"></span></label></div>
           <div class="trow"><div class="tname">ViewContent<small>visualização de conteúdo</small></div><label class="toggle"><input type="checkbox" id="tog-ViewContent" checked/><span class="tslider"></span></label></div>
           <div class="trow"><div class="tname">InitiateCheckout<small>clique em botão compra</small></div><label class="toggle"><input type="checkbox" id="tog-InitiateCheckout" checked/><span class="tslider"></span></label></div>
-          <div class="trow"><div class="tname">ScrollDepth<small>25%, 50%, 75%, 90%</small></div><label class="toggle"><input type="checkbox" id="tog-ScrollDepth" checked/><span class="tslider"></span></label></div>
+          <div class="trow"><div class="tname">ScrollDepth<small>25%%, 50%%, 75%%, 90%%</small></div><label class="toggle"><input type="checkbox" id="tog-ScrollDepth" checked/><span class="tslider"></span></label></div>
           <div class="trow"><div class="tname">TimeOnPage<small>30s, 60s, 120s</small></div><label class="toggle"><input type="checkbox" id="tog-TimeOnPage" checked/><span class="tslider"></span></label></div>
         </div>
       </div>
-
       <div class="panel">
         <div class="ph"><div class="ptitle">🧪 Testar Evento</div></div>
         <div class="tpanel">
@@ -227,7 +197,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
           <div class="tres" id="testResult"></div>
         </div>
       </div>
-
       <div class="panel">
         <div class="ph"><div class="ptitle">🔧 Configurações</div></div>
         <div class="cfg">
@@ -242,144 +211,26 @@ header{display:flex;align-items:center;justify-content:space-between;padding:20p
   </div>
 </div>
 </div>
-
 <script>
 const CAPI_URL='/.netlify/functions/capi';
 const LOGS_URL='/.netlify/functions/capi-logs';
 const AUTH_URL='/.netlify/functions/capi-auth';
 let allLogs=[];
-
-// ── LOGIN ──
-function doLogin(){
-  const pwd=document.getElementById('loginInput').value;
-  const err=document.getElementById('loginErr');
-  err.style.display='none';
-  fetch(AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})})
-    .then(r=>r.json()).then(d=>{
-      if(d.ok){sessionStorage.setItem('px_auth',d.token);showDashboard()}
-      else{err.style.display='block';document.getElementById('loginInput').value=''}
-    }).catch(()=>{
-      // fallback offline: verifica localmente se senha bate com hash conhecido
-      err.style.display='block';
-    });
-}
-
-function showDashboard(){
-  document.getElementById('loginScreen').style.display='none';
-  document.getElementById('dashboard').style.display='block';
-  document.getElementById('envLabel').textContent=window.location.hostname==='localhost'?'Local (dev)':'Netlify (prod)';
-  loadToggles();checkStatus();loadLogs();
-  setInterval(()=>{loadLogs();checkStatus()},30000);
-}
-
+function doLogin(){const pwd=document.getElementById('loginInput').value;const err=document.getElementById('loginErr');err.style.display='none';fetch(AUTH_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})}).then(r=>r.json()).then(d=>{if(d.ok){sessionStorage.setItem('px_auth',d.token);showDashboard()}else{err.style.display='block';document.getElementById('loginInput').value=''}}).catch(()=>{err.style.display='block'})}
+function showDashboard(){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('envLabel').textContent=window.location.hostname==='localhost'?'Local (dev)':'Netlify (prod)';loadToggles();checkStatus();loadLogs();setInterval(()=>{loadLogs();checkStatus()},30000)}
 function logout(){sessionStorage.removeItem('px_auth');location.reload()}
-
-// Verifica se já está autenticado
-window.addEventListener('DOMContentLoaded',()=>{
-  const token=sessionStorage.getItem('px_auth');
-  if(token){
-    fetch(AUTH_URL,{method:'GET',headers:{'x-auth-token':token}})
-      .then(r=>r.json()).then(d=>{if(d.ok)showDashboard()}).catch(()=>{});
-  }
-});
-
-// ── STATUS ──
-async function checkStatus(){
-  const badge=document.getElementById('statusBadge'),text=document.getElementById('statusText');
-  try{
-    const res=await fetch(CAPI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event_name:'_ping',event_time:Math.floor(Date.now()/1000)})});
-    const ok=res.status<500;
-    badge.className='status-badge '+(ok?'online':'offline');
-    text.textContent=ok?'CAPI Online':'CAPI Erro';
-  }catch(e){badge.className='status-badge offline';text.textContent='Offline'}
-}
-
-// ── LOGS ──
-async function loadLogs(){
-  const btn=document.getElementById('refreshBtn');
-  btn.classList.add('spinning');
-  try{
-    const token=sessionStorage.getItem('px_auth')||'';
-    const res=await fetch(LOGS_URL,{headers:{'x-auth-token':token}});
-    if(res.ok){const d=await res.json();allLogs=d.logs||[]}
-    else{allLogs=JSON.parse(localStorage.getItem('capi_logs')||'[]')}
-  }catch(e){allLogs=JSON.parse(localStorage.getItem('capi_logs')||'[]')}
-  renderLogs();renderMetrics();renderChart();
-  document.getElementById('lastUpdate').textContent='Atualizado '+new Date().toLocaleTimeString('pt-BR');
-  btn.classList.remove('spinning');
-}
-
+window.addEventListener('DOMContentLoaded',()=>{const token=sessionStorage.getItem('px_auth');if(token){fetch(AUTH_URL,{method:'GET',headers:{'x-auth-token':token}}).then(r=>r.json()).then(d=>{if(d.ok)showDashboard()}).catch(()=>{})}});
+async function checkStatus(){const badge=document.getElementById('statusBadge'),text=document.getElementById('statusText');try{const res=await fetch(CAPI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event_name:'_ping',event_time:Math.floor(Date.now()/1000)})});const ok=res.status<500;badge.className='status-badge '+(ok?'online':'offline');text.textContent=ok?'CAPI Online':'CAPI Erro'}catch(e){badge.className='status-badge offline';text.textContent='Offline'}}
+async function loadLogs(){const btn=document.getElementById('refreshBtn');btn.classList.add('spinning');try{const token=sessionStorage.getItem('px_auth')||'';const res=await fetch(LOGS_URL,{headers:{'x-auth-token':token}});if(res.ok){const d=await res.json();allLogs=d.logs||[]}else{allLogs=JSON.parse(localStorage.getItem('capi_logs')||'[]')}}catch(e){allLogs=JSON.parse(localStorage.getItem('capi_logs')||'[]')}renderLogs();renderMetrics();renderChart();document.getElementById('lastUpdate').textContent='Atualizado '+new Date().toLocaleTimeString('pt-BR');btn.classList.remove('spinning')}
 function evClass(e){return({'PageView':'ev-PageView','ViewContent':'ev-ViewContent','InitiateCheckout':'ev-InitiateCheckout','ScrollDepth':'ev-ScrollDepth','TimeOnPage':'ev-TimeOnPage','Lead':'ev-Lead','Purchase':'ev-Purchase'}[e]||'ev-custom')}
-
-function renderLogs(){
-  const stream=document.getElementById('logStream');
-  const filter=document.getElementById('filterEvent').value;
-  const list=filter?allLogs.filter(l=>l.event===filter):allLogs;
-  if(!list.length){stream.innerHTML='<div class="log-empty"><div class="ico">📭</div><span>Nenhum evento registrado</span><span style="font-size:9px;margin-top:4px;color:var(--muted)">Dispare um evento de teste para começar</span></div>';return}
-  stream.innerHTML=list.slice(0,300).map(l=>{
-    const t=new Date(l.timestamp||Date.now()).toLocaleTimeString('pt-BR');
-    const u=(l.url||'').replace(/^https?:\/\/[^\/]+/,'').slice(0,35)||'/';
-    const s=l.ok!==false?'ok':'err';
-    return`<div class="log-item"><span class="log-time">${t}</span><span class="ev-tag ${evClass(l.event)}">${l.event}</span><span class="log-url" title="${l.url||''}">${u}</span><span class="log-st ${s}">${s==='ok'?'200':'ERR'}</span></div>`;
-  }).join('');
-}
-
-function renderMetrics(){
-  const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage'];
-  const h24=Date.now()-86400000;
-  const rec=allLogs.filter(l=>new Date(l.timestamp||0).getTime()>h24);
-  evs.forEach(ev=>{const el=document.getElementById('cnt-'+ev);if(el)el.textContent=rec.filter(l=>l.event===ev).length});
-  const t=document.getElementById('cnt-Total');if(t)t.textContent=rec.length;
-}
-
-function renderChart(){
-  const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage'];
-  const cols={PageView:'#60a5fa',ViewContent:'#a78bfa',InitiateCheckout:'#4ade80',ScrollDepth:'#d4a017',TimeOnPage:'#f472b6'};
-  const data=evs.map(ev=>({ev,c:allLogs.filter(l=>l.event===ev).length}));
-  const max=Math.max(...data.map(d=>d.c),1);
-  document.getElementById('chartBars').innerHTML=data.map(({ev,c})=>`<div class="bar-row"><div class="bar-lbl">${ev}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(c/max*100)}%;background:${cols[ev]}"></div></div><div class="bar-cnt">${c}</div></div>`).join('');
-}
-
-function clearLogs(){
-  if(!confirm('Limpar logs locais?'))return;
-  localStorage.removeItem('capi_logs');allLogs=[];renderLogs();renderMetrics();renderChart();
-}
-
-function saveToggles(){
-  const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage'];
-  const s={};evs.forEach(ev=>{s[ev]=document.getElementById('tog-'+ev).checked});
-  localStorage.setItem('capi_toggles',JSON.stringify(s));
-  toast('✅ Configurações salvas!');
-}
-
-function loadToggles(){
-  const s=JSON.parse(localStorage.getItem('capi_toggles')||'{}');
-  Object.keys(s).forEach(ev=>{const el=document.getElementById('tog-'+ev);if(el)el.checked=s[ev]});
-}
-
-async function testEvent(){
-  const btn=document.getElementById('testBtn'),res=document.getElementById('testResult');
-  const ev=document.getElementById('testEvent').value;
-  const url=document.getElementById('testUrl').value||window.location.href;
-  const email=document.getElementById('testEmail').value||null;
-  btn.disabled=true;btn.textContent='⏳ ENVIANDO...';res.style.display='none';
-  try{
-    const r=await fetch(CAPI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event_name:ev,event_id:'test_'+Date.now(),event_time:Math.floor(Date.now()/1000),url,email,user_agent:navigator.userAgent,custom_data:{source:'dashboard_test'}})});
-    const d=await r.json();
-    const log={event:ev,url,timestamp:new Date().toISOString(),ok:r.ok,meta:d.meta};
-    const logs=JSON.parse(localStorage.getItem('capi_logs')||'[]');logs.unshift(log);
-    localStorage.setItem('capi_logs',JSON.stringify(logs.slice(0,500)));
-    allLogs.unshift(log);renderLogs();renderMetrics();renderChart();
-    res.className='tres ok';res.textContent='✅ '+JSON.stringify(d.meta||{ok:true},null,2);res.style.display='block';
-  }catch(e){res.className='tres err';res.textContent='❌ '+e.message;res.style.display='block'}
-  btn.disabled=false;btn.textContent='▶ DISPARAR EVENTO';
-}
-
-function toast(msg){
-  const t=document.createElement('div');t.textContent=msg;
-  t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--gold);color:#000;padding:10px 16px;border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;box-shadow:0 4px 20px #d4a01740';
-  document.body.appendChild(t);setTimeout(()=>t.remove(),2500);
-}
+function renderLogs(){const stream=document.getElementById('logStream');const filter=document.getElementById('filterEvent').value;const list=filter?allLogs.filter(l=>l.event===filter):allLogs;if(!list.length){stream.innerHTML='<div class="log-empty"><div class="ico">📭</div><span>Nenhum evento registrado</span><span style="font-size:9px;margin-top:4px;color:var(--muted)">Dispare um evento de teste para começar</span></div>';return}stream.innerHTML=list.slice(0,300).map(l=>{const t=new Date(l.timestamp||Date.now()).toLocaleTimeString('pt-BR');const u=(l.url||'').replace(/^https?:\/\/[^\/]+/,'').slice(0,35)||'/';const s=l.ok!==false?'ok':'err';return'<div class="log-item"><span class="log-time">'+t+'</span><span class="ev-tag '+evClass(l.event)+'">'+l.event+'</span><span class="log-url" title="'+(l.url||'')+'">'+u+'</span><span class="log-st '+s+'">'+(s==='ok'?'200':'ERR')+'</span></div>'}).join('')}
+function renderMetrics(){const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage'];const h24=Date.now()-86400000;const rec=allLogs.filter(l=>new Date(l.timestamp||0).getTime()>h24);evs.forEach(ev=>{const el=document.getElementById('cnt-'+ev);if(el)el.textContent=rec.filter(l=>l.event===ev).length});const t=document.getElementById('cnt-Total');if(t)t.textContent=rec.length}
+function renderChart(){const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage'];const cols={PageView:'#60a5fa',ViewContent:'#a78bfa',InitiateCheckout:'#4ade80',ScrollDepth:'#d4a017',TimeOnPage:'#f472b6'};const data=evs.map(ev=>({ev,c:allLogs.filter(l=>l.event===ev).length}));const max=Math.max(...data.map(d=>d.c),1);document.getElementById('chartBars').innerHTML=data.map(function(item){return'<div class="bar-row"><div class="bar-lbl">'+item.ev+'</div><div class="bar-track"><div class="bar-fill" style="width:'+Math.round(item.c/max*100)+'%;background:'+cols[item.ev]+'"></div></div><div class="bar-cnt">'+item.c+'</div></div>'}).join('')}
+function clearLogs(){if(!confirm('Limpar logs locais?'))return;localStorage.removeItem('capi_logs');allLogs=[];renderLogs();renderMetrics();renderChart()}
+function saveToggles(){const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage'];const s={};evs.forEach(ev=>{s[ev]=document.getElementById('tog-'+ev).checked});localStorage.setItem('capi_toggles',JSON.stringify(s));toast('Configuracoes salvas!')}
+function loadToggles(){const s=JSON.parse(localStorage.getItem('capi_toggles')||'{}');Object.keys(s).forEach(ev=>{const el=document.getElementById('tog-'+ev);if(el)el.checked=s[ev]})}
+async function testEvent(){const btn=document.getElementById('testBtn'),res=document.getElementById('testResult');const ev=document.getElementById('testEvent').value;const url=document.getElementById('testUrl').value||window.location.href;const email=document.getElementById('testEmail').value||null;btn.disabled=true;btn.textContent='ENVIANDO...';res.style.display='none';try{const r=await fetch(CAPI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event_name:ev,event_id:'test_'+Date.now(),event_time:Math.floor(Date.now()/1000),url:url,email:email,user_agent:navigator.userAgent,custom_data:{source:'dashboard_test'}})});const d=await r.json();const log={event:ev,url:url,timestamp:new Date().toISOString(),ok:r.ok,meta:d.meta};const logs=JSON.parse(localStorage.getItem('capi_logs')||'[]');logs.unshift(log);localStorage.setItem('capi_logs',JSON.stringify(logs.slice(0,500)));allLogs.unshift(log);renderLogs();renderMetrics();renderChart();res.className='tres ok';res.textContent=JSON.stringify(d.meta||{ok:true},null,2);res.style.display='block'}catch(e){res.className='tres err';res.textContent=e.message;res.style.display='block'}btn.disabled=false;btn.textContent='DISPARAR EVENTO'}
+function toast(msg){const t=document.createElement('div');t.textContent=msg;t.style.cssText='position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--gold);color:#000;padding:10px 16px;border-radius:8px;font-family:var(--mono);font-size:12px;font-weight:700;box-shadow:0 4px 20px #d4a01740';document.body.appendChild(t);setTimeout(function(){t.remove()},2500)}
 </script>
 </body>
 </html>
