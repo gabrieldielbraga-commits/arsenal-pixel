@@ -30,6 +30,45 @@ exports.handler = async function(event) {
     const body = JSON.parse(event.body || '{}');
     const { event_name, pixel_id } = body;
 
+    // Postback de venda externo (Cartpanda, Yampi, Vega, GGCheckout, etc)
+    if (event_name === 'postback_purchase' || body.postback === true) {
+      const targets2 = pixel_id ? pixels.filter(p => p.id === pixel_id) : pixels;
+      const results2 = [];
+      for (const px of targets2) {
+        try {
+          const meta = await sendToMeta(px.id, px.token, {
+            ...body,
+            event_name: 'Purchase',
+          });
+          results2.push({ pixel_id: px.id, pixel_name: px.name, ok: !meta.error, meta });
+          const log = {
+            id: body.event_id || ('pb_'+Date.now()),
+            event: 'Purchase',
+            pixel_id: px.id,
+            pixel_name: px.name,
+            url: body.page_url || null,
+            ip: body.client_ip || null,
+            fbp: body.fbp || null,
+            fbc: body.fbc || null,
+            utm_source: body.custom_data?.utm_source || null,
+            utm_medium: body.custom_data?.utm_medium || null,
+            utm_campaign: body.custom_data?.utm_campaign || null,
+            value: body.custom_data?.value || null,
+            order_id: body.custom_data?.order_id || null,
+            source: body.source || 'postback',
+            ok: !meta.error,
+            events_received: meta.events_received,
+            timestamp: new Date().toISOString(),
+          };
+          eventLogs.unshift(log);
+          if (eventLogs.length > 2000) eventLogs = eventLogs.slice(0, 2000);
+        } catch(e) {
+          results2.push({ pixel_id: px.id, ok: false, error: e.message });
+        }
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ ok: true, results: results2 }) };
+    }
+
     // Ping interno
     if (event_name === '_ping') {
       const pixels = getPixels();

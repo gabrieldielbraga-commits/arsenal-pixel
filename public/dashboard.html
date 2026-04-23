@@ -83,7 +83,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .logbox{height:440px;overflow-y:auto}
 .logbox::-webkit-scrollbar{width:3px}
 .logbox::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
-.lrow{display:grid;grid-template-columns:68px 14px 140px 1fr 36px;gap:8px;align-items:center;padding:8px 16px;border-bottom:1px solid #25253540;font-family:var(--mono);font-size:9px;transition:background .12s}
+.lrow{display:grid;grid-template-columns:68px 14px 140px 1fr 60px 36px;gap:8px;align-items:center;padding:8px 16px;border-bottom:1px solid #25253540;font-family:var(--mono);font-size:9px;transition:background .12s}
 .lrow:hover{background:#25253530}
 .lt{color:var(--muted)}
 .lpx{width:8px;height:8px;border-radius:50%;flex-shrink:0}
@@ -94,7 +94,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .ev-ScrollDepth{background:#d4a01718;color:var(--gold);border:1px solid #d4a01730}
 .ev-TimeOnPage{background:#ec489918;color:#f472b6;border:1px solid #ec489930}
 .ev-Lead{background:#10b98118;color:#34d399;border:1px solid #10b98130}
-.ev-Purchase{background:#22c55e18;color:#4ade80;border:1px solid #22c55e30}
+.ev-Purchase{background:#d4a01720;color:var(--gold);border:1px solid #d4a01740;font-weight:800}
+.ev-postback{background:#d4a01730;color:var(--gold2);border:1px solid #d4a01760;font-weight:800}
 .ev-AddToCart{background:#f59e0b18;color:#fbbf24;border:1px solid #f59e0b30}
 .ev-custom{background:#64748b18;color:#94a3b8;border:1px solid #64748b30}
 .lu{color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -216,6 +217,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="mc" style="--cc:#4ade80"><div class="mc-lbl">Purchase</div><div class="mc-val" id="c-pu">0</div><div class="mc-sub">compras</div></div>
     <div class="mc" style="--cc:#f472b6"><div class="mc-lbl">Scroll+Time</div><div class="mc-val" id="c-st">0</div><div class="mc-sub">engajamento</div></div>
     <div class="mc" style="--cc:var(--gold)"><div class="mc-lbl">Total 24h</div><div class="mc-val" id="c-tt">0</div><div class="mc-sub">todos eventos</div></div>
+    <div class="mc" style="--cc:#4ade80;grid-column:span 1"><div class="mc-lbl">Receita 24h</div><div class="mc-val" id="c-rev" style="font-size:18px">R$0</div><div class="mc-sub">Purchase events</div></div>
   </div>
 
   <!-- MAIN GRID -->
@@ -441,7 +443,8 @@ function renderLogs(){
     const u=(l.url||'').replace(/^https?:\/\/[^\/]+/,'').slice(0,30)||'/';
     const s=l.ok!==false?'ok':'er';
     const c=PX_COLORS[(pxIdx[l.pixel_id]||0)%PX_COLORS.length];
-    return'<div class="lrow"><span class="lt">'+t+'</span><span class="lpx" style="background:'+c+'" title="'+(l.pixel_name||'')+'"></span><span class="ev '+evClass(l.event)+'">'+l.event+'</span><span class="lu" title="'+(l.url||'')+'">'+u+'</span><span class="lst '+s+'">'+(s==='ok'?'✓':'✗')+'</span></div>';
+    const val=l.value?'R$'+Number(l.value).toFixed(2):'';
+    return'<div class="lrow"><span class="lt">'+t+'</span><span class="lpx" style="background:'+c+'" title="'+(l.pixel_name||'')+'"></span><span class="ev '+evClass(l.event)+'">'+l.event+'</span><span class="lu" title="'+(l.url||'')+'">'+u+'</span><span class="lt" style="color:var(--gold);font-weight:700">'+val+'</span><span class="lst '+s+'">'+(s==='ok'?'✓':'✗')+'</span></div>';
   }).join('');
 }
 
@@ -452,7 +455,11 @@ function renderMetrics(){
   document.getElementById('c-vc').textContent=r.filter(l=>l.event==='ViewContent').length;
   document.getElementById('c-ic').textContent=r.filter(l=>l.event==='InitiateCheckout').length;
   document.getElementById('c-ld').textContent=r.filter(l=>l.event==='Lead').length;
-  document.getElementById('c-pu').textContent=r.filter(l=>l.event==='Purchase').length;
+  const purchases=r.filter(l=>l.event==='Purchase');
+  document.getElementById('c-pu').textContent=purchases.length;
+  const totalRev=purchases.reduce((s,l)=>s+(Number(l.value)||0),0);
+  const revEl=document.getElementById('c-rev');
+  if(revEl)revEl.textContent=totalRev>0?'R$'+totalRev.toFixed(2):'R$0';
   document.getElementById('c-st').textContent=r.filter(l=>l.event==='ScrollDepth'||l.event==='TimeOnPage').length;
   document.getElementById('c-tt').textContent=r.length;
 }
