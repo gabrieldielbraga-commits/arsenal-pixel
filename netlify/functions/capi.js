@@ -23,6 +23,16 @@ function normalizePhone(phone) {
   return p;
 }
 
+
+async function saveLog(baseUrl, logData) {
+  try {
+    await fetch(baseUrl + '/.netlify/functions/capi-logs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-logs-secret': process.env.LOGS_SECRET || '' },
+      body: JSON.stringify(logData),
+    });
+  } catch(e) { console.warn('Erro ao salvar log:', e.message); }
+}
 exports.handler = async function(event, context) {
   // CORS preflight
   if (event.httpMethod === 'OPTIONS') {
@@ -61,6 +71,11 @@ exports.handler = async function(event, context) {
       dob,
       custom_data
     } = body;
+
+
+    if (event_name === '_ping') {
+      return { statusCode: 200, headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' }, body: JSON.stringify({ ok: true, ping: true }) };
+    }
 
     if (!event_name) {
       return { statusCode: 400, body: JSON.stringify({ error: 'event_name obrigatório' }) };
