@@ -493,7 +493,15 @@ function saveToggles(){
   const evs=['PageView','ViewContent','InitiateCheckout','ScrollDepth','TimeOnPage','Lead','Purchase'];
   const s={};evs.forEach(ev=>{s[ev]=document.getElementById('t-'+ev).checked});
   localStorage.setItem('yt_toggles',JSON.stringify(s));
-  toast('Configuracoes salvas!');
+  const token=sessionStorage.getItem('yt')||'';
+  fetch('/.netlify/functions/yesh-config',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-auth-token':token},
+    body:JSON.stringify(s)
+  }).then(r=>r.json()).then(d=>{
+    if(d.ok)toast('✅ Eventos salvos e aplicados!');
+    else toast('❌ Erro ao salvar');
+  }).catch(()=>toast('❌ Erro de conexão'));
 }
 function loadToggles(){
   const s=JSON.parse(localStorage.getItem('yt_toggles')||'{}');
