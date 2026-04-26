@@ -95,19 +95,19 @@ exports.handler = async function(event) {
 
       for (const px of targets) {
         try {
-          const meta = await sendToMeta(px.id, px.token, {
+          meta = await sendToMeta(px.id, px.token, {
             event_name:       'Purchase',
             event_id:         body.event_id || body.order_id || undefined,
-            event_source_url: body.page_url || null,
-            fbp:              cached.fbp  || body.fbp  || null,
-            fbc:              cached.fbc  || body.fbc  || null,
+            event_source_url: body.page_url || 'https://arsenalsecreto.online/',
+            fbp:              cached.fbp  || body.fbp  || body.tracking?.fbp || null,
+            fbc:              cached.fbc  || body.fbc  || body.tracking?.fbc || null,
             ip:               cached.ip   || realIP,
             ua:               cached.ua   || realUA,
-            email:            body.email  || cached.email,
-            phone:            body.phone  || cached.phone,
+            email:            body.email  || cached.email || body.customer?.email,
+            phone:            body.phone  || cached.phone || body.customer?.phone,
             fn:               body.fn     || cached.fn,
             ln:               body.ln     || cached.ln,
-            external_id:      body.external_id || cached.external_id,
+            external_id:      body.external_id || cached.external_id || body.tracking?.external_id,
             custom_data: {
               currency:     body.currency || 'BRL',
               value:        typeof body.value === 'number' ? body.value : parseFloat(body.value) || 0,

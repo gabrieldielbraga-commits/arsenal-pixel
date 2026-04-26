@@ -204,7 +204,7 @@ function domReady(){
     });
 
     // Injeta UTMs nos links de checkout
-    document.querySelectorAll('a[href*="pay."],a[href*="checkout"],a[href*="hotmart.com"],a[href*="kiwify.com"],a[href*="eduzz.com"],a[href*="monetizze.com"]').forEach(function(a){
+    document.querySelectorAll('a[href*="pay."],a[href*="checkout"],a[href*="ggcheckout.app"],a[href*="hotmart.com"],a[href*="kiwify.com"],a[href*="eduzz.com"],a[href*="monetizze.com"]').forEach(function(a){
       try{
         var u=new URL(a.href);
         var utms=getUTMs();
@@ -228,7 +228,7 @@ function domReady(){
               content_name:document.title||null,
               content_ids:[window.location.pathname],
               content_type:'product',
-              value:19.90,currency:'BRL'
+              value:parseFloat(el.getAttribute("data-price")||"19.90"),currency:'BRL'
             });
             // Injeta external_id na URL do checkout para o webhook recuperar contexto
             try{
