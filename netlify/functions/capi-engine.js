@@ -1,101 +1,110 @@
 const crypto = require('crypto');
-const API_VERSION = 'v19.0';
+const API_VERSION = process.env.META_API_VERSION || 'v21.0';
+const PIXEL_ID    = process.env.PIXEL_ID_1;
+const CAPI_TOKEN  = process.env.ACCESS_TOKEN_1;
+const TEST_CODE   = process.env.META_TEST_EVENT_CODE || null;
 
-function sha256(v) {
-  if (!v) return null;
-  return crypto.createHash('sha256').update(v.toString().trim().toLowerCase()).digest('hex');
-}
+// ── Hash SHA-256 ──────────────────────────────────────────────────────────────
+const sha256 = (v) => {
+  if (!v && v !== 0) return undefined;
+  return crypto.createHash('sha256').update(String(v)).digest('hex');
+};
 
-function normalizePhone(p) {
+// ── Normalizadores ────────────────────────────────────────────────────────────
+const normalizeEmail   = (e) => e?.trim().toLowerCase();
+const normalizePhone   = (p) => {
   if (!p) return null;
-  let n = p.replace(/\D/g,'');
-  if (n.length===11 && n[0]!=='5') n='55'+n;
-  if (n.length===10) n='55'+n;
-  return n;
+  let d = p.replace(/\D/g,'');
+  if (d.length === 11 || d.length === 10) d = '55' + d;
+  return d;
+};
+const normalizeName    = (n) => n?.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+const normalizeState   = (s) => s?.trim().toLowerCase().slice(0,2);
+const normalizeCountry = (c) => (c||'br').trim().toLowerCase();
+const normalizeCity    = (c) => c?.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'');
+
+// ── Monta user_data ───────────────────────────────────────────────────────────
+function buildUserData({ email, phone, fn, ln, city, state, country,
+                          external_id, fbp, fbc, ip, ua }) {
+  const ud = {};
+  if (email)       ud.em          = [sha256(normalizeEmail(email))].filter(Boolean);
+  if (phone)       ud.ph          = [sha256(normalizePhone(phone))].filter(Boolean);
+  if (fn)          ud.fn          = [sha256(normalizeName(fn))].filter(Boolean);
+  if (ln)          ud.ln          = [sha256(normalizeName(ln))].filter(Boolean);
+  if (city)        ud.ct          = [sha256(normalizeCity(city))].filter(Boolean);
+  if (state)       ud.st          = [sha256(normalizeState(state))].filter(Boolean);
+  if (country)     ud.country     = [sha256(normalizeCountry(country))].filter(Boolean);
+  if (external_id) ud.external_id = [sha256(String(external_id))].filter(Boolean);
+  // NUNCA hashear estes:
+  if (fbp) ud.fbp = fbp;
+  if (fbc) ud.fbc = fbc;
+  if (ip)  ud.client_ip_address = ip;
+  if (ua)  ud.client_user_agent = ua;
+  return ud;
 }
 
-// Busca geolocalização pelo IP (cache em memória)
+// ── Geolocalização por IP ─────────────────────────────────────────────────────
 const geoCache = {};
-async function getGeoByIP(ip) {
-  if (!ip || ip === '127.0.0.1' || ip.startsWith('192.168') || ip.startsWith('10.')) return null;
+async function getGeo(ip) {
+  if (!ip || ip==='127.0.0.1' || ip.startsWith('192.168') || ip.startsWith('10.')) return null;
   if (geoCache[ip]) return geoCache[ip];
   try {
-    const res = await fetch(`https://ipapi.co/${ip}/json/`, { signal: AbortSignal.timeout(2000) });
-    if (!res.ok) return null;
-    const d = await res.json();
-    const geo = {
-      city:         d.city        || null,
-      state:        d.region_code || null,
-      country:      d.country     || null,
-    };
+    const r = await fetch(`https://ipapi.co/${ip}/json/`, { signal: AbortSignal.timeout(2000) });
+    if (!r.ok) return null;
+    const d = await r.json();
+    const geo = { city: d.city||null, state: d.region_code||null, country: d.country||null };
     geoCache[ip] = geo;
     return geo;
-  } catch(e) {
-    return null;
-  }
+  } catch(e) { return null; }
 }
 
+// ── Envio para Meta CAPI ──────────────────────────────────────────────────────
 async function sendToMeta(pixelId, accessToken, eventData) {
-  const url = `https://graph.facebook.com/${API_VERSION}/${pixelId}/events`;
   const {
-    event_name, event_id, event_time, fbp, fbc, external_id,
-    client_ip, user_agent, page_url, email, phone, fn, ln, dob,
-    city, state, country, custom_data
+    event_name, event_id, event_time, event_source_url,
+    fbp, fbc, external_id, ip, ua,
+    email, phone, fn, ln, city, state, country,
+    custom_data
   } = eventData;
 
-  const userData = {};
-
-  // Dados pessoais hasheados
-  if (email)       userData.em          = sha256(email);
-  if (phone)       userData.ph          = sha256(normalizePhone(phone));
-  if (fn)          userData.fn          = sha256(fn);
-  if (ln)          userData.ln          = sha256(ln);
-  if (dob)         userData.db          = sha256(dob);
-  if (external_id) userData.external_id = sha256(external_id);
-
-  // Cookies Meta
-  if (fbp)         userData.fbp = fbp;
-  if (fbc)         userData.fbc = fbc;
-
-  // Rede
-  if (client_ip)   userData.client_ip_address = client_ip;
-  if (user_agent)  userData.client_user_agent  = user_agent;
-
-  // Geolocalização — direto ou via IP
-  let geo = null;
-  if (city || state || country) {
-    geo = { city, state, country };
-  } else if (client_ip) {
-    geo = await getGeoByIP(client_ip);
+  // Tenta geolocalização se não veio
+  let geo = { city, state, country };
+  if (!city && !state && ip) {
+    const g = await getGeo(ip);
+    if (g) geo = g;
   }
 
-  if (geo) {
-    if (geo.city)    userData.ct = sha256(geo.city.toLowerCase().replace(/\s+/g, ''));
-    if (geo.state)   userData.st = sha256(geo.state.toLowerCase());
-    if (geo.country) userData.country = sha256(geo.country.toLowerCase());
-  }
+  const userData = buildUserData({
+    email, phone, fn, ln,
+    city: geo.city, state: geo.state, country: geo.country,
+    external_id, fbp, fbc, ip, ua
+  });
 
   const payload = {
-    access_token: accessToken,
     data: [{
       event_name,
       event_time:       event_time || Math.floor(Date.now()/1000),
-      event_id:         (event_name === 'Purchase' || event_name === 'InitiateCheckout')
-                          ? undefined
-                          : (event_id || ('evt_'+Date.now())),
-      event_source_url: page_url || null,
+      event_id:         event_id || undefined,
+      event_source_url: event_source_url || null,
       action_source:    'website',
       user_data:        userData,
-      custom_data:      custom_data || {}
-    }]
+      custom_data:      custom_data || {},
+    }],
   };
 
+  if (TEST_CODE) payload.test_event_code = TEST_CODE;
+
+  const url = `https://graph.facebook.com/${API_VERSION}/${pixelId}/events?access_token=${accessToken}`;
   const res = await fetch(url, {
-    method:  'POST',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(payload)
+    body: JSON.stringify(payload)
   });
-  return await res.json();
+
+  const json = await res.json();
+  if (!res.ok || json.error) console.error('[Meta CAPI error]', JSON.stringify(json));
+  else console.log('[Meta CAPI]', event_name, '→ received:', json.events_received);
+  return json;
 }
 
-module.exports = { sendToMeta, sha256 };
+module.exports = { sendToMeta, buildUserData, sha256, getGeo };
