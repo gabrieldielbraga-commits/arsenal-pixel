@@ -221,11 +221,25 @@ function domReady(){
         try{
           var txt=el.innerText||el.textContent||el.value||'';
           if(bw.test(txt)&&isActive('InitiateCheckout')){
+            var checkoutEventId=eid();
+            sc('_checkout_eid',checkoutEventId,1);
+            sss('_checkout_eid',checkoutEventId);
             send('InitiateCheckout',{email:ce,phone:cp,fn:cf,ln:cl,
               content_name:document.title||null,
               content_ids:[window.location.pathname],
-              content_type:'product'
+              content_type:'product',
+              value:19.90,currency:'BRL'
             });
+            // Injeta external_id na URL do checkout para o webhook recuperar contexto
+            try{
+              var href=el.href||'';
+              if(href&&href!=='#'){
+                var u=new URL(href,window.location.href);
+                u.searchParams.set('external_id',checkoutEventId);
+                if(ce)u.searchParams.set('email',ce);
+                el.href=u.toString();
+              }
+            }catch(e){}
           }
         }catch(e){}
       });
