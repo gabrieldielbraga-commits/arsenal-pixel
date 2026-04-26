@@ -35,7 +35,7 @@ async function sendToMeta(pixelId, accessToken, eventData) {
     data: [{
       event_name,
       event_time:       event_time || Math.floor(Date.now()/1000),
-      event_id:         event_id   || ('evt_'+Date.now()),
+      event_id:         (event_name === 'Purchase' || event_name === 'InitiateCheckout') ? undefined : (event_id || ('evt_'+Date.now())),
       event_source_url: page_url   || null,
       action_source:    'website',
       user_data:        userData,
