@@ -204,7 +204,7 @@ function domReady(){
     });
 
     // Injeta UTMs nos links de checkout
-    document.querySelectorAll('a[href*="pay."],a[href*="checkout"],a[href*="ggcheckout.app"],a[href*="hotmart.com"],a[href*="kiwify.com"],a[href*="eduzz.com"],a[href*="monetizze.com"]').forEach(function(a){
+    document.querySelectorAll('a[href*="pay."],a[href*="checkout"],a[href*="ggcheckout.app"],a[href*="hotmart.com"],a[href*="kiwify.com"],a[href*="eduzz.com"],a[href*="monetizze.com"],a[href*="ggcheckout"]').forEach(function(a){
       try{
         var u=new URL(a.href);
         var utms=getUTMs();
@@ -220,7 +220,9 @@ function domReady(){
       el.addEventListener('click',function(){
         try{
           var txt=el.innerText||el.textContent||el.value||'';
-          if(bw.test(txt)&&isActive('InitiateCheckout')){
+          var href=(el.href||el.getAttribute('href')||'').toLowerCase();
+          var isCheckoutLink=href.indexOf('ggcheckout')!==-1||href.indexOf('pay.')!==-1;
+          if((bw.test(txt)||isCheckoutLink)&&isActive('InitiateCheckout')){
             var checkoutEventId=eid();
             sc('_checkout_eid',checkoutEventId,1);
             sss('_checkout_eid',checkoutEventId);

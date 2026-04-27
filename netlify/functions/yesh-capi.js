@@ -147,7 +147,7 @@ exports.handler = async function(event) {
       try {
         const meta = await sendToMeta(px.id, px.token, {
           event_name,
-          event_id:         event_name === 'Purchase' || event_name === 'InitiateCheckout' ? undefined : (body.event_id || undefined),
+          event_id:         event_name === 'Purchase' ? undefined : (body.event_id || undefined),
           event_source_url: body.page_url || null,
           fbp:              body.fbp,
           fbc:              body.fbc,
