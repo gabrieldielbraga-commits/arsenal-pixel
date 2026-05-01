@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const API_VERSION = process.env.META_API_VERSION || 'v22.0';
+const API_VERSION = process.env.META_API_VERSION || 'v25.0';
 const PIXEL_ID    = process.env.PIXEL_ID_1;
 const CAPI_TOKEN  = process.env.ACCESS_TOKEN_1;
 const TEST_CODE   = process.env.META_TEST_EVENT_CODE || null;
