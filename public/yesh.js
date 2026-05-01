@@ -92,7 +92,7 @@ document.addEventListener('input',function(e){
     var tp=(el.type||'').toLowerCase();
     var at=((el.name||'')+' '+(el.id||'')+' '+(el.placeholder||'')+' '+(el.className||'')).toLowerCase();
     if(tp==='email'||at.indexOf('email')!==-1){
-      if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)){ce=el.value.trim();sc('_cem',ce,1);}
+      if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)){ce=el.value.trim();sc('_cem',ce,1);saveTrackingContext(ce);}
     }
     if(tp==='tel'||at.match(/phone|telefone|celular|whatsapp|fone/)){cp=el.value.replace(/\D/g,'');}
     if(at.match(/\bfirst.?name|^nome\b|primeiro/)){cf=el.value.trim().split(' ')[0];}
@@ -270,3 +270,23 @@ window.YeshTrack={
 };
 
 })();
+// ── SALVA CONTEXTO DE TRACKING NO ARSENAL MEMBROS ────────────────────────────
+var TRACKING_API = 'https://dkrnhgpwjjvrvbterblq.supabase.co/functions/v1/save-tracking-context';
+var trackingSent = false;
+function saveTrackingContext(email) {
+  if (trackingSent || !email) return;
+  trackingSent = true;
+  fetch(TRACKING_API, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    keepalive: true,
+    body: JSON.stringify({
+      email:       email,
+      fbp:         gc('_fbp')  || null,
+      fbc:         gc('_fbc')  || null,
+      external_id: xid         || null,
+      user_agent:  navigator.userAgent || null,
+      client_ip:   ss('_cip')  || null,
+    })
+  }).catch(function(){});
+}
