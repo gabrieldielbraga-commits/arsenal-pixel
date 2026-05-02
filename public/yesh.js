@@ -79,6 +79,8 @@ if(pid){
     var fc=gc('_fbc');var fp=gc('_fbp');
     if(fc)initParams.fbc=fc;
     if(fp)initParams.fbp=fp;
+    if(ce)initParams.em=ce;
+    if(cp)initParams.ph=cp;
     fbq('init',pid,initParams);
   }catch(e){fbq('init',pid);}
 }
